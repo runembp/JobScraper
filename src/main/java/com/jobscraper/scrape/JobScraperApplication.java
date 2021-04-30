@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class JobScraperApplication
 {
-    //COMMIT TEST
+    //COMMIT TEST TO WUHU
     public static void main(String[] args)
     {
         SpringApplication.run(JobScraperApplication.class, args);
