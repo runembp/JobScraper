@@ -25,4 +25,11 @@ public class JobRestController
         jobService.getJobTitles(country);
         return jobRepository.findAll();
     }
+
+    @GetMapping("/deleteAll")
+    public void deleteAll()
+    {
+        jobRepository.deleteAll();
+    }
+
 }
