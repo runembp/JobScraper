@@ -6,9 +6,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.util.List;
-
 @Service
 public class JobService
 {
@@ -17,38 +14,31 @@ public class JobService
     public JobService(IJobRepository jobRepository)
     {
         this.jobRepository = jobRepository;
-
-        getJobTitles();
     }
 
-    public List<String> getjobtitle() throws IOException {
-        var doc = Jsoup.connect("https://thehub.io/jobs?countryCode=DK").get();
-        var elements = doc.getAllElements().select("span.card-job-find-list__position").eachText();
-
-
-        return elements;
-    }
-
-    public void getJobTitles()
+    public void getJobTitles(String country)
     {
         try
         {
-
-            var doc = Jsoup.connect("https://thehub.io/jobs?countryCode=DK").get();
+            if(country == null)
+                country = "DK";
+            var doc = Jsoup.connect("https://thehub.io/jobs?countryCode=" + country).get();
             var tests = doc.getAllElements().select("div[class=bullet-inline-list text-gray-600 fw500]");
+            var elements = doc.getAllElements().select("span.card-job-find-list__position").eachText();
 
             int index = 0;
 
             for (var test : tests) {
                 Elements test1 = test.getElementsByTag("span");
 
-                var jobtitle = getjobtitle().get(index);
+                var jobtitle = elements.get(index);
                 var company = test1.get(0).text();
                 var location = test1.get(1).text();
                 var time = test1.get(2).text();
 
-                jobRepository.save(new Job(jobtitle, company, location, time));
+                var job = new Job(jobtitle, company, location, time);
 
+                jobRepository.save(job);
                 index++;
             }
         }
@@ -56,7 +46,5 @@ public class JobService
         {
             System.out.println("Error happened in JobService, getJobTitles(): " + e);
         }
-
     }
-
 }
