@@ -25,5 +25,7 @@ public class Job
         this.company = company;
         this.location = location;
         this.time = time;
+
+
     }
 }
