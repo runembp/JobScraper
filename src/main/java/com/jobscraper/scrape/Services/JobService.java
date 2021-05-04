@@ -3,8 +3,11 @@ package com.jobscraper.scrape.Services;
 import com.jobscraper.scrape.Models.Job;
 import com.jobscraper.scrape.Repository.IJobRepository;
 import org.jsoup.Jsoup;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.util.List;
 
 @Service
 public class JobService
@@ -18,16 +21,35 @@ public class JobService
         getJobTitles();
     }
 
+    public List<String> getjobtitle() throws IOException {
+        var doc = Jsoup.connect("https://thehub.io/jobs?countryCode=DK").get();
+        var elements = doc.getAllElements().select("span.card-job-find-list__position").eachText();
+
+
+        return elements;
+    }
+
     public void getJobTitles()
     {
         try
         {
-            var doc = Jsoup.connect("https://thehub.io/jobs?countryCode=DK").get();
-            var elements = doc.getAllElements().select("span.card-job-find-list__position").eachText();
 
-            for(var element : elements)
-            {
-                jobRepository.save(new Job(element));
+            var doc = Jsoup.connect("https://thehub.io/jobs?countryCode=DK").get();
+            var tests = doc.getAllElements().select("div[class=bullet-inline-list text-gray-600 fw500]");
+
+            int index = 0;
+
+            for (var test : tests) {
+                Elements test1 = test.getElementsByTag("span");
+
+                var jobtitle = getjobtitle().get(index);
+                var company = test1.get(0).text();
+                var location = test1.get(1).text();
+                var time = test1.get(2).text();
+
+                jobRepository.save(new Job(jobtitle, company, location, time));
+
+                index++;
             }
         }
         catch (Exception e)

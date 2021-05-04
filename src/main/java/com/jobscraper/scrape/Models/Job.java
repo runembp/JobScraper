@@ -16,9 +16,14 @@ public class Job
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String jobTitle;
+    private String company;
+    private String location;
+    private String time;
 
-    public Job(String jobTitle)
-    {
+    public Job(String jobTitle, String company, String location, String time) {
         this.jobTitle = jobTitle;
+        this.company = company;
+        this.location = location;
+        this.time = time;
     }
 }
