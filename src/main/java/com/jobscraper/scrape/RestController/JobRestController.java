@@ -31,6 +31,7 @@ public class JobRestController
     @GetMapping("/deleteAll")
     public ResponseEntity<Object> deleteAll()
     {
+        jobRepository.deleteAll();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
